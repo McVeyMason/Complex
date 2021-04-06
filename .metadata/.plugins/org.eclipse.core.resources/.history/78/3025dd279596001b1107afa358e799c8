@@ -1,0 +1,149 @@
+package mandlebrot.complex;
+
+public class ComplexNumber {
+
+	public static final ComplexNumber R = new ComplexNumber(1.0, 0);
+	public static final ComplexNumber I = new ComplexNumber(0, 1.0);
+
+	/**
+	 * The real component
+	 */
+	protected double a;
+	/**
+	 * The i component
+	 */
+	protected double b;
+
+	public ComplexNumber() {
+		a = 0;
+		b = 0;
+	}
+
+	/**
+	 * a + b*i
+	 * 
+	 * @param a The real component
+	 */
+	public ComplexNumber(double a) {
+		this.b = a;
+		b = 0;
+	}
+
+	/**
+	 * a + b*i
+	 * 
+	 * @param a The real component
+	 * @param b The i component
+	 */
+	public ComplexNumber(double a, double b) {
+		this.a = a;
+		this.b = b;
+	}
+
+	public String toString() {
+		return a + " " + b + "i";
+	}
+
+	public double getA() {
+		return a;
+	}
+
+	public double getB() {
+		return b;
+	}
+
+	public ComplexNumber getConjagate() {
+		return new ComplexNumber(this.a, -this.b);
+	}
+
+	public double getDistance() {
+		return Math.sqrt(a * a + b * b);
+	}
+
+	public ComplexNumber plus(ComplexNumber complex) {
+		return new ComplexNumber(this.a + complex.a, this.b + complex.b);
+	}
+
+	public void plusEquals(ComplexNumber complex) {
+		this.a += complex.a;
+		this.b += complex.b;
+	}
+
+	public ComplexNumber times(ComplexNumber complex) {
+		double a = (this.a * complex.a) - (this.b * complex.b);
+		double b = (this.a * complex.b) + (this.b * complex.a);
+		return new ComplexNumber(a, b);
+	}
+
+	public void timesEquals(ComplexNumber complex) {
+		this.a = (this.a * complex.a) - (this.b * complex.b);
+		this.b = (this.a * complex.b) + (this.b * complex.a);
+	}
+
+	public ComplexNumber dividedBy(double d) {
+		return new ComplexNumber(this.a / d, this.b / d);
+	}
+
+	public void dividedByEquals(double d) {
+		this.a /= d;
+		this.b /= d;
+	}
+
+	public ComplexNumber dividedBy(ComplexNumber complex) {
+		return this.times(complex.getConjagate()).dividedBy(complex.times(complex.getConjagate()).getA());
+	}
+
+	public void dividedByEquals(ComplexNumber complex) {
+		ComplexNumber result = this.dividedBy(complex);
+		this.a = result.a;
+		this.b = result.b;
+	}
+
+	public ComplexNumber pow(double power) {
+		
+	}
+	
+	@Deprecated
+	public ComplexNumber powLoop(int p) {
+		if (p >= 0) {
+			ComplexNumber result = new ComplexNumber(1);
+			for (int i = 0; i < p; i++) {
+				result.timesEquals(this);
+			}
+			return result;
+		} else {
+			ComplexNumber result = new ComplexNumber(1);
+			for (int i = 0; i > p; i--) {
+				result.dividedByEquals(this);
+			}
+			return result;
+		}
+	}
+
+	@Deprecated
+	public ComplexNumber powRecursive(int p) {
+		if (p == 0) {
+			return new ComplexNumber(1);
+		} else if (p > 0) {
+			return this.times(this.powRecursive(p - 1));
+		}
+		// p must be < 0
+		return R.dividedBy(this.powRecursive(-p));
+	}
+
+	// Static math if I feel like it
+
+	public static ComplexNumber exp(ComplexNumber c) {
+		
+	}
+	
+	public static ComplexNumber add(ComplexNumber c1, ComplexNumber c2) {
+		return new ComplexNumber(c1.a + c2.a, c1.b + c2.b);
+	}
+
+	public static ComplexNumber mulitply(ComplexNumber c1, ComplexNumber c2) {
+		double a = (c1.a * c2.a) - (c1.b * c2.b);
+		double b = (c1.a * c2.b) + (c1.b * c2.a);
+		return new ComplexNumber(a, b);
+	}
+}

@@ -1,0 +1,159 @@
+package mandlebrot.display;
+
+import java.awt.Point;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
+public class Listener extends MouseMotionAdapter
+		implements KeyListener, MouseListener, FocusListener, MouseMotionListener, MouseWheelListener {
+
+	private boolean mousePressed;
+	private Point mouseStart;
+	private Point mouseAt;
+	
+	private boolean scrolling;
+	private Point scrollAt;
+	private int scrollAmount;
+
+	public Listener() {
+		mousePressed = false;
+		mouseStart = new Point();
+		mouseAt = new Point();
+		
+		scrolling = false;
+		scrollAt = new Point();
+		scrollAmount = 0;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			mousePressed = false;
+			// System.out.println("clicked");
+			// mouseStart = e.getPoint();
+			// mouseAt = e.getPoint();
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			mousePressed = true;
+			System.out.println("pressed");
+			mouseStart = e.getPoint();
+			mouseAt = e.getPoint();
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			mousePressed = false;
+			// System.out.println("relaesed");
+			mouseStart = mouseAt;
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (mousePressed) {
+			// System.out.println("drag");
+			mouseAt = e.getPoint();
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean getMousePressed() {
+		return mousePressed;
+	}
+
+	public int getXDiff() {
+//		 System.out.println("Mouse at " + mouseAt + " Mouse started at " +
+//		 mouseStart);
+		return mouseAt.x - mouseStart.x;
+	}
+
+	public int getYDiff() {
+		return mouseAt.y - mouseStart.y;
+	}
+
+	public void clearDiff() {
+		mouseStart = mouseAt;
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		scrolling = true;
+		scrollAmount = e.getClickCount();
+		scrollAt = e.getPoint();
+	}
+	
+	public boolean isScrolling() {
+		return scrolling;
+	}
+	
+	public int getScollAmount() {
+		return scrollAmount;
+	}
+	
+	public void clearScrollAmount() {
+		scrolling = false;
+		scrollAmount = 0;
+	}
+
+}
