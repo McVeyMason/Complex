@@ -1,1 +1,2 @@
-./Mandlebrot/generated/
+*.png
+*.jpg
