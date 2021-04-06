@@ -19,7 +19,7 @@ public class Display extends Canvas {
 	 */
 	private static final long serialVersionUID = 3427381498790975542L;
 
-	public static final boolean SAVE_IMG = false;
+	public static final boolean SAVE_IMG = true;
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = 135;
 	private static final String TITLE = "Mandlebrot";
@@ -74,7 +74,7 @@ public class Display extends Canvas {
 		Graphics g = img.createGraphics();
 		g.drawImage(img, 0, 0, WIDTH, HEIGHT, null);
 		g.dispose();
-		File file = new File("mandlbrot" + "(" + x + "," + y + ")" +  +  zoomAmount + "x" + WIDTH + "x" + HEIGHT+ ".png");
+		File file = new File("generated\\mandlbrot" + "(" + x + "," + y + ")" +  +  zoomAmount + "x" + WIDTH + "x" + HEIGHT+ ".png");
 		System.out.println(file.getAbsolutePath());
 		try {
 			ImageIO.write(img, "png", file);
