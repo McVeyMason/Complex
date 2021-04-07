@@ -1,0 +1,92 @@
+package mandlebrot.graph;
+
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.time.LocalTime;
+
+import javax.swing.JFrame;
+
+public class ProgressInfo extends Canvas{
+	
+	private static final int WIDTH = 100;
+	private static final int HEIGHT = 100;
+	
+	private static final long serialVersionUID = -6880647534477952882L;
+	
+	
+	private JFrame jFrame;
+	private Grapher grapher;
+	
+	public ProgressInfo(Grapher grapher) {
+		this.jFrame = new JFrame();
+		this.grapher = grapher;
+		
+		jFrame.add(this);
+		jFrame.setTitle("Progress");
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setLocation(0, 0);
+		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		jFrame.setResizable(false);
+		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jFrame.setVisible(true);
+		jFrame.pack();
+	}
+	
+	public void startTimer(int total) {
+		long firstTime = System.nanoTime();
+		long lastTime = System.nanoTime();
+		long currentTime = System.nanoTime();
+		int lastCompleated = 0;
+		long sleepTime = 1000l;
+		try {
+			Thread.sleep(sleepTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		while (grapher.getPixelsCompleated() < total) {
+			currentTime = System.nanoTime();
+			int pixelsProcessed = (grapher.getPixelsCompleated() - lastCompleated);
+			double elapsed = (currentTime - firstTime) / 1.0E9;
+			double estimateAve = elapsed / ((double) grapher.getPixelsCompleated()) * (total - grapher.getPixelsCompleated());
+			double estimatePercent = elapsedPercent / (double) pixelsProcessed * (total - grapher.getPixelsCompleated());
+
+
+			lastTime = System.nanoTime();
+			lastCompleated = grapher.getPixelsCompleated();
+			
+			String out = "";
+			out += "\n" + t;
+			out += "\n" + (grapher.getPixelsCompleated() / (double) total * 100.0) + "%";
+			out += "\nTotal time elapsed: " + toTime(elapsed);
+			out += "\nTime for " + percentProcessed + "%: " + toTime(elapsedPercent);
+			out += "\nEstimated by average: " + toTime(estimateAve);
+			out += "\nEstimate by last: " + toTime(estimatePercent);
+			System.out.println(out);
+			
+			try {
+				Thread.sleep(sleepTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	private static String toTime(double t) {
+		if (t > 60.0) {
+			t /= 60.0;
+			if (t > 60.0) {
+				t /= 60.0;
+				return t + "h";
+			} else {
+				return t + "m";
+			}
+		} else {
+			return t + "s";
+		}
+	}
+	
+	private void render(double percent, double timeElapsed) {
+		
+	}
+}

@@ -1,0 +1,11 @@
+package mandlebrot.graph;
+
+import javax.swing.JFrame;
+
+public class ProgressBar {
+	
+	JFrame frame;
+	public ProgressBar() {
+		this.frame = new JFrame();
+	}
+}

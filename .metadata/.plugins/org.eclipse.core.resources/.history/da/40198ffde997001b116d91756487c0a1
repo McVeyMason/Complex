@@ -1,0 +1,37 @@
+package mandlebrot.graph;
+
+import java.awt.Canvas;
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+
+public class ProgressBar extends Canvas{
+	
+	private static final int WIDTH = 100;
+	private static final int HEIGHT = 100;
+	
+	private static final long serialVersionUID = -6880647534477952882L;
+	
+	
+	private JFrame jFrame;
+	private Grapher grapher;
+	
+	public ProgressBar(Grapher grapher) {
+		this.jFrame = new JFrame();
+		this.grapher = grapher;
+		
+		jFrame.add(this);
+		jFrame.setTitle("Progress");
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setLocation(0, 0);
+		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		jFrame.setResizable(false);
+		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jFrame.setVisible(true);
+		jFrame.pack();
+	}
+	
+	public void startTimer() {
+		
+	}
+}

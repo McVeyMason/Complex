@@ -1,0 +1,5 @@
+package mandlebrot.graph;
+
+public class ProgressBar {
+
+}
