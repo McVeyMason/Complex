@@ -2610,3 +2610,17 @@ java.lang.Error: SWT Resource was not properly disposed
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1461)
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1434)
+
+!ENTRY org.eclipse.egit.ui 4 0 2021-04-06 17:05:47.206
+!MESSAGE Applying stashed commit '0a8132b' failed due to 'Applying stashed changes resulted in a conflict'
+!STACK 1
+org.eclipse.team.core.TeamException: Applying stashed changes resulted in a conflict
+	at org.eclipse.egit.core.op.StashApplyOperation$1.run(StashApplyOperation.java:81)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2292)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2317)
+	at org.eclipse.egit.core.op.StashApplyOperation.execute(StashApplyOperation.java:86)
+	at org.eclipse.egit.ui.internal.commit.command.StashApplyHandler$1.runInWorkspace(StashApplyHandler.java:55)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:42)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.team.core 4 0 2021-04-06 17:05:47.220
+!MESSAGE Applying stashed changes resulted in a conflict
