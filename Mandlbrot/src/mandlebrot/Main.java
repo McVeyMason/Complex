@@ -7,7 +7,6 @@ import mandlebrot.complex.ComplexNumber;
 import mandlebrot.display.Display;
 import mandlebrot.display.Listener;
 import mandlebrot.graph.Grapher;
-import mandlebrot.graph.Grapher.ColorStyle;
 
 public class Main {
 
@@ -19,9 +18,11 @@ public class Main {
 		display = new Display();
 		grapher = new Grapher(16, 9);
 		listener = display.getListener();
-		grapher.setCenter(-0.6423704543370716, 0.1687860153558362);
-		grapher.setZoom(-35);
-		grapher.setPower(new ComplexNumber(2, 0));
+		grapher.setCenter(0.3345219616889319,0.5734872459025102);
+		grapher.setZoom(-34);
+		grapher.setColorShift(0.6949995f);
+		grapher.setColors(grapher.colorHueSqrt);
+		
 		if (Display.SAVE_IMG) {
 			// testRenders();
 			renderImage();
@@ -33,7 +34,7 @@ public class Main {
 	public static void renderImage() {
 		System.out.println("Image Start");
 		grapher.setPixelsThread(display.getPixels());
-		display.renderImage(grapher.getCenterX(), grapher.getCenterY(), 1.0 / grapher.getZoomAmount());
+		display.renderImage(grapher.getCenterX(), grapher.getCenterY(), 1.0 / grapher.getZoomAmount(), grapher);
 	}
 
 	public static void testRenders() {
@@ -249,19 +250,19 @@ public class Main {
 
 		// Changes color pallet with numpad
 		if (listener.keys[KeyEvent.VK_NUMPAD0]) {
-			grapher.setColors(ColorStyle.BLACK_AND_WHITE);
+			grapher.setColors(Grapher.colorBlackAndWhite);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD1]) {
-			grapher.setColors(ColorStyle.GRAY_SCALE);
+			grapher.setColors(Grapher.colorGrayScale);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD2]) {
-			grapher.setColors(ColorStyle.LINEAR_HUE_WRAP);
+			grapher.setColors(grapher.colorHue);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD3]) {
-			grapher.setColors(ColorStyle.LINEAR_HUE);
+			grapher.setColors(grapher.colorHueConst);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD4]) {
-			grapher.setColors(ColorStyle.SQRT_HUE);
+			grapher.setColors(grapher.colorHueSqrt);
 		}
 	}
 
