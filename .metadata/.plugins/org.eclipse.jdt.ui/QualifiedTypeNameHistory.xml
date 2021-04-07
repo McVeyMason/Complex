@@ -18,4 +18,5 @@
     <fullyQualifiedTypeName name="java.awt.event.KeyEvent"/>
     <fullyQualifiedTypeName name="java.util.Timer"/>
     <fullyQualifiedTypeName name="mandlebrot.complex.ComplexNumber"/>
+    <fullyQualifiedTypeName name="mandlebrot.graph.Grapher.ColorStyle"/>
 </qualifiedTypeNameHistroy>
