@@ -7,7 +7,6 @@
     <fullyQualifiedTypeName name="java.awt.Point"/>
     <fullyQualifiedTypeName name="java.awt.List"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="java.awt.Color"/>
     <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="javax.imageio.ImageIO"/>
     <fullyQualifiedTypeName name="java.util.Scanner"/>
@@ -19,4 +18,7 @@
     <fullyQualifiedTypeName name="java.util.Timer"/>
     <fullyQualifiedTypeName name="mandlebrot.complex.ComplexNumber"/>
     <fullyQualifiedTypeName name="mandlebrot.graph.Grapher.ColorStyle"/>
+    <fullyQualifiedTypeName name="sun.java2d.loops.GraphicsPrimitiveProxy"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+    <fullyQualifiedTypeName name="java.awt.Font"/>
 </qualifiedTypeNameHistroy>

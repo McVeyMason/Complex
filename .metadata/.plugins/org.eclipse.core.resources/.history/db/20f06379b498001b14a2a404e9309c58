@@ -149,7 +149,6 @@ public class ComplexNumber {
 		return this.times(complex.getConjagate()).dividedBy(complex.times(complex.getConjagate()).getA());
 	}
 
-	@Deprecated
 	public void dividedByEquals(ComplexNumber complex) {
 		ComplexNumber result = this.dividedBy(complex);
 		this.a = result.a;

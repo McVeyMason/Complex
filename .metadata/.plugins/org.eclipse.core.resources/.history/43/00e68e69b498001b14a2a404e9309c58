@@ -100,7 +100,7 @@ public class ComplexNumber {
 		return new ComplexNumber(this.a + complex.a, this.b + complex.b);
 	}
 
-	@Deprecated
+	@Depreciated
 	public void plusEquals(ComplexNumber complex) {
 		this.a += complex.a;
 		this.b += complex.b;
@@ -124,7 +124,6 @@ public class ComplexNumber {
 		return new ComplexNumber(a, b);
 	}
 
-	@Deprecated
 	public void timesEquals(double d) {
 		this.a *= d;
 		this.b *= d;
@@ -139,7 +138,6 @@ public class ComplexNumber {
 		return new ComplexNumber(this.a / d, this.b / d);
 	}
 
-	@Deprecated
 	public void dividedByEquals(double d) {
 		this.a /= d;
 		this.b /= d;
@@ -149,7 +147,6 @@ public class ComplexNumber {
 		return this.times(complex.getConjagate()).dividedBy(complex.times(complex.getConjagate()).getA());
 	}
 
-	@Deprecated
 	public void dividedByEquals(ComplexNumber complex) {
 		ComplexNumber result = this.dividedBy(complex);
 		this.a = result.a;

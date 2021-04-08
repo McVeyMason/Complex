@@ -40,7 +40,7 @@ public class Quaternion extends ComplexNumber {
 	public Quaternion getConjagate() {
 		return new Quaternion(a, -b, -c, -d);
 	}
-
+	
 	public Quaternion getInverse() {
 		return this.getConjagate().times(1 / (a * a + b * b + c * c + d * d));
 	}
@@ -53,7 +53,6 @@ public class Quaternion extends ComplexNumber {
 		return new Quaternion(a + q.a, b + q.b, c + q.c, d + q.d);
 	}
 
-	@Deprecated
 	public void plusEquals(Quaternion q) {
 		this.a += q.a;
 		this.b += q.b;
@@ -65,7 +64,6 @@ public class Quaternion extends ComplexNumber {
 		return new Quaternion(a - q.a, b - q.b, c - q.c, d - q.d);
 	}
 
-	@Deprecated
 	public void minusEquals(Quaternion q) {
 		this.a -= q.a;
 		this.b -= q.b;
@@ -85,7 +83,6 @@ public class Quaternion extends ComplexNumber {
 		return new Quaternion(r, i, j, k);
 	}
 
-	@Deprecated
 	public void timesEquals(Quaternion q) {
 		double r = (this.a * q.a) - (this.b * q.b) - (this.c * q.c) - (this.d * q.d);
 		double i = (this.a * q.b) + (this.b * q.a) + (this.c * q.d) - (this.d * q.c);
@@ -97,8 +94,6 @@ public class Quaternion extends ComplexNumber {
 		this.d = k;
 	}
 
-	public Quaternion dividedBy(Quaternion q) {
-		return this.times(q.getInverse());
-	}
+	
 
 }

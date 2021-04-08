@@ -53,7 +53,6 @@ public class Quaternion extends ComplexNumber {
 		return new Quaternion(a + q.a, b + q.b, c + q.c, d + q.d);
 	}
 
-	@Deprecated
 	public void plusEquals(Quaternion q) {
 		this.a += q.a;
 		this.b += q.b;
@@ -65,7 +64,6 @@ public class Quaternion extends ComplexNumber {
 		return new Quaternion(a - q.a, b - q.b, c - q.c, d - q.d);
 	}
 
-	@Deprecated
 	public void minusEquals(Quaternion q) {
 		this.a -= q.a;
 		this.b -= q.b;
