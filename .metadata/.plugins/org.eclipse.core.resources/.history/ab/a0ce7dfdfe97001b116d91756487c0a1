@@ -64,7 +64,7 @@ public class ComplexNumber {
 	 * Using re^(theta*i) format, this computes the theta value.
 	 * @return The theta value
 	 */
-	public final double getTheta() {
+	public double getTheta() {
 		double theta;
 		if (a > 0) {
 			theta = Math.atan(b/a);

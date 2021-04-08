@@ -1,0 +1,11 @@
+package complex;
+
+public class Quaternion extends ComplexNumber{
+	
+	protected double c;
+	protected double d;
+	
+	public Quaternion() {
+		super();
+	}
+}
