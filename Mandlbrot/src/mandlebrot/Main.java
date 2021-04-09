@@ -18,12 +18,12 @@ public class Main {
 		display = new Display();
 		grapher = new Grapher(16, 9);
 		listener = display.getListener();
-		grapher.setCenter(-1.301757197386972,-0.02065061201752584);
-		grapher.setZoom(-8);
-		grapher.setJulia(true);
-		grapher.setC(new ComplexNumber(-3.2904999999997937,0.0));
-		grapher.setColorShift(1.4149989f);
-		grapher.setColors(grapher.colorHueSqrt);
+//		grapher.setCenter(-1.301757197386972,-0.02065061201752584);
+//		grapher.setZoom(-8);
+//		grapher.setJulia(true);
+//		grapher.setC(new ComplexNumber(-3.2904999999997937,0.0));
+//		grapher.setColorShift(1.4149989f);
+//		grapher.setColors(grapher.colorHueSqrt);
 
 		if (Display.SAVE_IMG) {
 			// testRenders();

@@ -4,8 +4,8 @@ import static mandlebrot.display.Display.HEIGHT;
 import static mandlebrot.display.Display.WIDTH;
 
 import java.awt.Color;
-import java.time.LocalTime;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import mandlebrot.complex.ComplexNumber;
 import mandlebrot.display.Display;
@@ -26,7 +26,7 @@ public class Grapher {
 	private double centerX;
 	private double centerY;
 	private int zoom;
-	
+
 	private boolean complexPow;
 	private ComplexNumber pow;
 
@@ -44,12 +44,12 @@ public class Grapher {
 		this.centerX = 0;
 		this.centerY = 0;
 		this.zoom = 0;
-		this.complexPow = true;
+		this.complexPow = false;
 		this.pow = new ComplexNumber(2.0, 0);
 		this.julia = false;
 		this.c = new ComplexNumber();
 		this.colorShift = 0.0f;
-		colors = colorHueSqrt;
+		colors = logHue;
 	}
 
 	public Grapher(double width, double height, ComplexNumber c) {
@@ -164,7 +164,7 @@ public class Grapher {
 	public void setJulia(boolean julian) {
 		this.julia = julian;
 	}
-	
+
 	public ComplexNumber getC() {
 		return c;
 	}
@@ -192,7 +192,7 @@ public class Grapher {
 	public void setColors(BiFunction<Integer, Integer, Integer> colors) {
 		this.colors = colors;
 	}
-	
+
 	public int getPixelsCompleated() {
 		return pixelsCompleated;
 	}
@@ -317,7 +317,7 @@ public class Grapher {
 		for (int i = 0; i < iter; i++) {
 			if (complexPow) {
 				z = z.pow(2.0).plus(ComplexNumber.exp(ComplexNumber.I.times(this.c.getA())).times(0.7885));
-				//z = z.minus((z.pow(3).minus(1)).dividedBy(z.times(z).times(3)));
+				// z = z.minus((z.pow(3).minus(1)).dividedBy(z.times(z).times(3)));
 			} else {
 				z = z.times(z).plus(c);
 			}
@@ -348,5 +348,8 @@ public class Grapher {
 
 	public final BiFunction<Integer, Integer, Integer> colorHueSqrt = (n, iter) -> Color.HSBtoRGB(
 			(float) Math.sqrt(n / (float) iter) + colorShift, 1f, (float) Math.pow((iter - n) / (float) iter, 3));
+
+	public final BiFunction<Integer, Integer, Integer> logHue = (n, nn) -> Color
+			.HSBtoRGB((float) (Math.log(Math.log(n) / 0.693147) / 0.693147)  + colorShift, 1f, 1f);
 
 }
