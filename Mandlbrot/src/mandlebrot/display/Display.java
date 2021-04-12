@@ -80,13 +80,13 @@ public class Display extends Canvas {
 		name += "(" + x + "," + y + ")";
 		name += zoomAmount + "x";
 		File file = new File("generated\\" + name + ".png");
-		System.out.println(file.getAbsolutePath());
 		try {
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(file.getAbsolutePath());
 	}
 
 	public void setPixels(int[] pixels) {

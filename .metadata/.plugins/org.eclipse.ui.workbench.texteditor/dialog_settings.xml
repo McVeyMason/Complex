@@ -6,8 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="total"/>
+		<item key="selection" value="changeA"/>
 		<list key="findhistory">
+			<item value="changeC"/>
 			<item value="pixels.length"/>
 			<item value="KP_LEFT"/>
 			<item value="KP_RIGHT"/>
@@ -15,6 +16,7 @@
 			<item value="KP_UP"/>
 		</list>
 		<list key="replacehistory">
+			<item value="changeA"/>
 			<item value="total"/>
 			<item value="A"/>
 			<item value="D"/>

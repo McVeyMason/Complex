@@ -19,6 +19,8 @@
     <fullyQualifiedTypeName name="mandlebrot.complex.ComplexNumber"/>
     <fullyQualifiedTypeName name="mandlebrot.graph.Grapher.ColorStyle"/>
     <fullyQualifiedTypeName name="sun.java2d.loops.GraphicsPrimitiveProxy"/>
-    <fullyQualifiedTypeName name="java.awt.Color"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
+    <fullyQualifiedTypeName name="java.util.function.Function"/>
+    <fullyQualifiedTypeName name="java.lang.Thread"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
 </qualifiedTypeNameHistroy>
