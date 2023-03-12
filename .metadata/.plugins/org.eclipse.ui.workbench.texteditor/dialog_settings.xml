@@ -6,14 +6,22 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="A"/>
+		<item key="selection" value="SAVE"/>
 		<list key="findhistory">
+			<item value="save"/>
+			<item value="DEPTH"/>
+			<item value="zoom"/>
+			<item value="thread"/>
+			<item value="changeC"/>
+			<item value="pixels.length"/>
 			<item value="KP_LEFT"/>
 			<item value="KP_RIGHT"/>
 			<item value="KP_DOWN"/>
 			<item value="KP_UP"/>
 		</list>
 		<list key="replacehistory">
+			<item value="changeA"/>
+			<item value="total"/>
 			<item value="A"/>
 			<item value="D"/>
 			<item value="S"/>
@@ -23,8 +31,8 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item key="DIALOG_X_ORIGIN" value="826"/>
 		<item key="DIALOG_Y_ORIGIN" value="268"/>
-		<item key="DIALOG_WIDTH" value="284"/>
-		<item key="DIALOG_HEIGHT" value="391"/>
-		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|5|0|Segoe UI"/>
+		<item key="DIALOG_WIDTH" value="414"/>
+		<item key="DIALOG_HEIGHT" value="454"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|5|0|Segoe UI"/>
 	</section>
 </section>

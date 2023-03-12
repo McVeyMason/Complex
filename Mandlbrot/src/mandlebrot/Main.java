@@ -7,7 +7,6 @@ import mandlebrot.complex.ComplexNumber;
 import mandlebrot.display.Display;
 import mandlebrot.display.Listener;
 import mandlebrot.graph.Grapher;
-import mandlebrot.graph.Grapher.ColorStyle;
 
 public class Main {
 
@@ -19,9 +18,13 @@ public class Main {
 		display = new Display();
 		grapher = new Grapher(16, 9);
 		listener = display.getListener();
-		grapher.setCenter(-0.6423704543370716, 0.1687860153558362);
-		grapher.setZoom(-35);
-		grapher.setPower(new ComplexNumber(2, 0));
+//		grapher.setCenter(-1.301757197386972,-0.02065061201752584);
+//		grapher.setZoom(-8);
+//		grapher.setJulia(true);
+//		grapher.setC(new ComplexNumber(-3.2904999999997937,0.0));
+//		grapher.setColorShift(1.4149989f);
+//		grapher.setColors(grapher.colorHueSqrt);
+
 		if (Display.SAVE_IMG) {
 			// testRenders();
 			renderImage();
@@ -33,7 +36,7 @@ public class Main {
 	public static void renderImage() {
 		System.out.println("Image Start");
 		grapher.setPixelsThread(display.getPixels());
-		display.renderImage(grapher.getCenterX(), grapher.getCenterY(), 1.0 / grapher.getZoomAmount());
+		display.renderImage(grapher.getCenterX(), grapher.getCenterY(), 1.0 / grapher.getZoomAmount(), grapher);
 	}
 
 	public static void testRenders() {
@@ -101,20 +104,29 @@ public class Main {
 		grapher.changeZoom(clicks);
 	}
 
+	/**
+	 * This method processes key inputs at 60 FPS. The controls are as follows:<br>
+	 * p = save screen shot, <br>
+	 * F1 = change to Mandelbrot set, <br>
+	 * F2 = change to julia set, <br>
+	 * Arrow keys = change the c value for julia sets,<br>
+	 * WASD = change the power,<br>
+	 * Page up/down = change the color shift<br>
+	 */
 	private static void processKeys() {
 		if (listener.keys[KeyEvent.VK_P]) {
 			new Thread(() -> renderImage()).start();
 			listener.keys[KeyEvent.VK_P] = false;
 		}
 		if (listener.keys[KeyEvent.VK_F1]) {
-			grapher.setJulian(false);
+			grapher.setJulia(false);
 		}
 		if (listener.keys[KeyEvent.VK_F2]) {
-			grapher.setJulian(true);
+			grapher.setJulia(true);
 		}
 
 		// changes julia c with arrow keys
-		if (grapher.getJulian()) {
+		if (grapher.getJulia()) {
 			if (listener.keys[KeyEvent.VK_SHIFT]) {
 				if (listener.keys[KeyEvent.VK_CONTROL]) {
 					// Changing c value in the julia set
@@ -162,6 +174,7 @@ public class Main {
 			} else {
 				// Changing c value in the julia set
 				if (listener.keys[KeyEvent.VK_UP]) {
+					System.out.println(grapher.getC());
 					grapher.changeC(0, 0.01);
 				}
 				if (listener.keys[KeyEvent.VK_DOWN]) {
@@ -225,7 +238,6 @@ public class Main {
 			// Changing the power for the set
 			if (listener.keys[KeyEvent.VK_W]) {
 
-				System.out.println("VK_W");
 				grapher.changePower(0, 0.1);
 			}
 			if (listener.keys[KeyEvent.VK_S]) {
@@ -249,19 +261,19 @@ public class Main {
 
 		// Changes color pallet with numpad
 		if (listener.keys[KeyEvent.VK_NUMPAD0]) {
-			grapher.setColors(ColorStyle.BLACK_AND_WHITE);
+			grapher.setColors(Grapher.colorBlackAndWhite);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD1]) {
-			grapher.setColors(ColorStyle.GRAY_SCALE);
+			grapher.setColors(Grapher.colorGrayScale);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD2]) {
-			grapher.setColors(ColorStyle.LINEAR_HUE_WRAP);
+			grapher.setColors(grapher.colorHue);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD3]) {
-			grapher.setColors(ColorStyle.LINEAR_HUE);
+			grapher.setColors(grapher.colorHueConst);
 		}
 		if (listener.keys[KeyEvent.VK_NUMPAD4]) {
-			grapher.setColors(ColorStyle.SQRT_HUE);
+			grapher.setColors(grapher.colorHueSqrt);
 		}
 	}
 

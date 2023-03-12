@@ -104,6 +104,14 @@ public class ComplexNumber {
 		this.a += complex.a;
 		this.b += complex.b;
 	}
+	
+	public ComplexNumber minus(double d) {
+		return new ComplexNumber(this.a - d, this.b);
+	}
+	
+	public ComplexNumber minus(ComplexNumber complex) {
+		return new ComplexNumber(this.a - complex.a, this.b - complex.b);
+	}
 
 	public ComplexNumber times(double d) {
 		return new ComplexNumber(d * a, d * b);

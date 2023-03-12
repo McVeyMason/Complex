@@ -4,8 +4,8 @@ import static mandlebrot.display.Display.HEIGHT;
 import static mandlebrot.display.Display.WIDTH;
 
 import java.awt.Color;
-import java.time.LocalTime;
-import java.util.Timer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import mandlebrot.complex.ComplexNumber;
 import mandlebrot.display.Display;
@@ -27,15 +27,16 @@ public class Grapher {
 	private double centerY;
 	private int zoom;
 
+	private boolean complexPow;
 	private ComplexNumber pow;
 
-	private boolean julian;
+	private boolean julia;
 	private ComplexNumber c;
 
 	private int pixelsCompleated;
 
 	private float colorShift;
-	private ColorStyle colors;
+	private BiFunction<Integer, Integer, Integer> colors;
 
 	public Grapher(double width, double height) {
 		this.width = width;
@@ -43,11 +44,12 @@ public class Grapher {
 		this.centerX = 0;
 		this.centerY = 0;
 		this.zoom = 0;
+		this.complexPow = false;
 		this.pow = new ComplexNumber(2.0, 0);
-		this.julian = false;
+		this.julia = false;
 		this.c = new ComplexNumber();
 		this.colorShift = 0.0f;
-		colors = ColorStyle.SQRT_HUE;
+		colors = logHue;
 	}
 
 	public Grapher(double width, double height, ComplexNumber c) {
@@ -57,7 +59,7 @@ public class Grapher {
 		this.centerY = 0;
 		this.zoom = 0;
 		this.pow = new ComplexNumber(2.0, 0);
-		this.julian = true;
+		this.julia = true;
 		this.c = c;
 		this.colorShift = 0.0f;
 	}
@@ -68,8 +70,8 @@ public class Grapher {
 		out += "\nCenter: (" + centerX + "," + centerY + ")";
 		out += "\nZoom: " + zoom;
 		out += "\nPower: " + pow;
-		out += "\nJulian: " + julian;
-		if (julian) {
+		out += "\nJulian: " + julia;
+		if (julia) {
 			out += "\nc=" + c;
 		}
 		out += "\nColor shift: " + colorShift;
@@ -155,12 +157,16 @@ public class Grapher {
 		this.pow.plusEquals(new ComplexNumber(a, b));
 	}
 
-	public boolean getJulian() {
-		return julian;
+	public boolean getJulia() {
+		return julia;
 	}
 
-	public void setJulian(boolean julian) {
-		this.julian = julian;
+	public void setJulia(boolean julian) {
+		this.julia = julian;
+	}
+
+	public ComplexNumber getC() {
+		return c;
 	}
 
 	public void setC(ComplexNumber c) {
@@ -182,9 +188,13 @@ public class Grapher {
 	public void changeColorShift(float change) {
 		this.colorShift += change;
 	}
-	
-	public void setColors(ColorStyle colors) {
+
+	public void setColors(BiFunction<Integer, Integer, Integer> colors) {
 		this.colors = colors;
+	}
+
+	public int getPixelsCompleated() {
+		return pixelsCompleated;
 	}
 
 	/**
@@ -220,126 +230,55 @@ public class Grapher {
 	public void setPixels(int[] pixels) {
 		int x = 0;
 		int y = 0;
-		int percent = pixels.length / 100;
-		long firstTime = System.nanoTime();
-		long lastTime = System.nanoTime();
-		long currentTime = System.nanoTime();
+		int iter = (int) (DEPTH * Math.exp(-zoom / 20.0));
 		for (int i = 0; i < pixels.length; i++) {
 			x = i % WIDTH;
 			y = i / WIDTH;
 			ComplexNumber c = new ComplexNumber(getGraphX(x), getGraphY(y));
 			// System.out.println(c);
-			pixels[i] = isInMandlebrotNum(c);
-			if (Display.SAVE_IMG) {
-				if (i % percent == 0 && i != 0) {
-					currentTime = System.nanoTime();
-					LocalTime t = LocalTime.now();
-					double elapsed = (currentTime - firstTime) / 1.0E9;
-					double elapsedPercent = (currentTime - lastTime) / 1.0E9;
-					double estimateAve = elapsed / ((double) i) * (pixels.length - i);
-					double estimatePercent = elapsedPercent / (double) percent * (pixels.length - i);
-
-					String out = "";
-					out += "\n" + t;
-					out += "\n" + (i / (double) pixels.length * 100.0) + "%";
-					out += "\nTotal time elapsed: " + toTime(elapsed);
-					out += "\nTime for percent: " + toTime(elapsedPercent);
-					out += "\nEstimated by average: " + toTime(estimateAve);
-					out += "\nEstimate by percent: " + toTime(estimatePercent);
-					System.out.println(out);
-
-					lastTime = currentTime;
-				}
-			}
+			pixels[i] = isInMandlebrotNum(c, iter);
 		}
 	}
 
 	public void setPixelsThread(int[] pixels) {
 		pixelsCompleated = 0;
+		int iter = (int) (DEPTH * Math.exp(-zoom / 20.0));
+
 		if (Display.SAVE_IMG) {
 			new Thread(() -> startTimer(pixels)).start();
 			System.out.println("Timer Started");
 		}
-		new Thread(() -> setPixelsTop(pixels)).start();
-		setPixelsBottom(pixels);
+
+		new Thread(() -> setPixelsTop(pixels, iter)).start();
+		setPixelsBottom(pixels, iter);
 	}
 
-	private void setPixelsTop(int[] pixels) {
+	private void setPixelsTop(int[] pixels, int iter) {
 		int x = 0;
 		int y = 0;
 		for (int i = 0; i < pixels.length && pixelsCompleated < pixels.length; i++, pixelsCompleated++) {
 			x = i % WIDTH;
 			y = i / WIDTH;
 			ComplexNumber c = new ComplexNumber(getGraphX(x), getGraphY(y));
-			pixels[i] = isInMandlebrotNum(c);
+			pixels[i] = isInMandlebrotNum(c, iter);
 		}
 	}
 
-	private void setPixelsBottom(int[] pixels) {
+	private void setPixelsBottom(int[] pixels, int iter) {
 		int x = 0;
 		int y = 0;
 		for (int i = pixels.length - 1; i >= 0 && pixelsCompleated < pixels.length; i--, pixelsCompleated++) {
 			x = i % WIDTH;
 			y = i / WIDTH;
 			ComplexNumber c = new ComplexNumber(getGraphX(x), getGraphY(y));
-			pixels[i] = isInMandlebrotNum(c);
+			pixels[i] = isInMandlebrotNum(c, iter);
 		}
 	}
 
 	private void startTimer(int[] pixels) {
 
-		long firstTime = System.nanoTime();
-		long lastTime = System.nanoTime();
-		long currentTime = System.nanoTime();
-		int lastCompleated = 0;
-		long sleepTime = (long) ((pixels.length / 25000.0 / 100.0) * 1000.0);
-		System.out.println(
-				"Sleep Time is " + sleepTime / 1000.0 + "\nFirst estimate is " + (pixels.length / 25000.0 / 100.0));
-		try {
-			Thread.sleep(sleepTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		while (pixelsCompleated < pixels.length) {
-			currentTime = System.nanoTime();
-			LocalTime t = LocalTime.now();
-			int pixelsProcessed = (pixelsCompleated - lastCompleated);
-			double percentProcessed = pixelsProcessed / (double) pixels.length;
-			double elapsed = (currentTime - firstTime) / 1.0E9;
-			double elapsedPercent = (currentTime - lastTime) / 1.0E9;
-			double estimateAve = elapsed / ((double) pixelsCompleated) * (pixels.length - pixelsCompleated);
-			double estimatePercent = elapsedPercent / (double) pixelsProcessed * (pixels.length - pixelsCompleated);
-
-			String out = "";
-			out += "\n" + t;
-			out += "\n" + (pixelsCompleated / (double) pixels.length * 100.0) + "%";
-			out += "\nTotal time elapsed: " + toTime(elapsed);
-			out += "\nTime for " + percentProcessed + "%: " + toTime(elapsedPercent);
-			out += "\nEstimated by average: " + toTime(estimateAve);
-			out += "\nEstimate by last: " + toTime(estimatePercent);
-			System.out.println(out);
-
-			lastTime = currentTime;
-			try {
-				Thread.sleep(sleepTime);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private static String toTime(double t) {
-		if (t > 60.0) {
-			t /= 60.0;
-			if (t > 60.0) {
-				t /= 60.0;
-				return t + "h";
-			} else {
-				return t + "m";
-			}
-		} else {
-			return t + "s";
-		}
+		ProgressInfo info = new ProgressInfo(this);
+		info.startTimer(pixels.length);
 	}
 
 	private boolean isInMandlebrot(ComplexNumber c) {
@@ -368,66 +307,49 @@ public class Grapher {
 		return 5.0E-2 > Math.abs(average2 - average1);
 	}
 
-	private int isInMandlebrotNum(ComplexNumber c) {
+	private int isInMandlebrotNum(ComplexNumber c, int iter) {
 		ComplexNumber z = c;
-		if (julian) {
+		if (julia) {
 			c = this.c;
 		}
 		int num = 0;
 		// System.out.println( DEPTH * Math.exp(-zoom / 10.0));
-		int iter = (int) (DEPTH * Math.exp(-zoom / 20.0));
 		for (int i = 0; i < iter; i++) {
-			z = z.pow(pow).plus(c);
+			if (complexPow) {
+				z = z.pow(2.0).plus(ComplexNumber.exp(ComplexNumber.I.times(this.c.getA())).times(0.7885));
+				// z = z.minus((z.pow(3).minus(1)).dividedBy(z.times(z).times(3)));
+			} else {
+				z = z.times(z).plus(c);
+			}
 			if (z.getDistance() > 4.0) {
-				return color(num, iter);
+				return colors.apply(num, iter);
 			}
 			num++;
+		}
+		if (colors == colorGrayScaleSqrt) {
+			return -1;
 		}
 		return 0;
 	}
 
-	public enum ColorStyle {
-		BLACK_AND_WHITE, GRAY_SCALE, LINEAR_HUE_WRAP, LINEAR_HUE, SQRT_HUE
-	}
+	public static final BiFunction<Integer, Integer, Integer> colorBlackAndWhite = (n, iter) -> (n % 2) - 1;
 
-	private int color(int n, int iter) {
-		switch (colors) {
-		case BLACK_AND_WHITE:
-			return colorBlackAndWhite(n);
-		case GRAY_SCALE:
-			return colorGrayScale(n);
-		case LINEAR_HUE_WRAP:
-			return colorHue(n, iter);
-		case LINEAR_HUE:
-			return colorHueConst(n, iter);
-		case SQRT_HUE:
-			return colorHueSqrt(n, iter);
-		default:
-			return 0;
-		}
+	public static final BiFunction<Integer, Integer, Integer> colorGrayScale = (n,
+			iter) -> (int) (Math.abs(Math.sin((double) n / DEPTH * 10.0) * 255)) * 0x010101;
 
-	}
+	public static final BiFunction<Integer, Integer, Integer> colorGrayScaleSqrt = (n,
+			iter) -> (int) (Math.sqrt(n / (double) iter) * 255) * 0x010101;
 
-	private static int colorBlackAndWhite(int n) {
-		return (n % 2) - 1;
-	}
+	public final BiFunction<Integer, Integer, Integer> colorHue = (n, iter) -> Color
+			.HSBtoRGB((float) n / DEPTH + colorShift, 1f, 1f);
 
-	private static int colorGrayScale(int n) {
-		return (int) (Math.abs(Math.sin((double) n / DEPTH * 10.0) * 255)) * 0x010101;
-	}
+	public final BiFunction<Integer, Integer, Integer> colorHueConst = (n, iter) -> Color
+			.HSBtoRGB((float) n / iter + colorShift, 1f, (float) ((iter - n) / (float) iter));
 
-	private static int colorHue(int n, int iter) {
-		return Color.HSBtoRGB((float) n / DEPTH, 1f, 1f);
-		// return Color.HSBtoRGB((float) Math.sqrt((float) n / DEPTH), 1f, 1f);
-	}
+	public final BiFunction<Integer, Integer, Integer> colorHueSqrt = (n, iter) -> Color.HSBtoRGB(
+			(float) Math.sqrt(n / (float) iter) + colorShift, 1f, (float) Math.pow((iter - n) / (float) iter, 3));
 
-	private int colorHueConst(int n, int iter) {
-		return Color.HSBtoRGB((float) n / iter + colorShift, 1f, (float) ((iter - n) / (float) iter));
-	}
-
-	private int colorHueSqrt(int n, int iter) {
-		return Color.HSBtoRGB((float) Math.sqrt(n / (float) iter) + colorShift, 1f,
-				(float) Math.pow((iter - n) / (float) iter, 3));
-	}
+	public final BiFunction<Integer, Integer, Integer> logHue = (n, nn) -> Color
+			.HSBtoRGB((float) (Math.log(Math.log(n) / 0.693147) / 0.693147)  + colorShift, 1f, 1f);
 
 }

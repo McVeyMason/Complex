@@ -41,7 +41,7 @@ public class ComplexNumber {
 	}
 
 	public String toString() {
-		return a + " " + b + "i";
+		return a + "+" + b + "i";
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ComplexNumber {
 	 * Using re^(theta*i) format, this computes the theta value.
 	 * @return The theta value
 	 */
-	public double getTheta() {
+	public final double getTheta() {
 		double theta;
 		if (a > 0) {
 			theta = Math.atan(b/a);
@@ -100,9 +100,18 @@ public class ComplexNumber {
 		return new ComplexNumber(this.a + complex.a, this.b + complex.b);
 	}
 
+	@Deprecated
 	public void plusEquals(ComplexNumber complex) {
 		this.a += complex.a;
 		this.b += complex.b;
+	}
+	
+	public ComplexNumber minus(double d) {
+		return new ComplexNumber(this.a - d, this.b);
+	}
+	
+	public ComplexNumber minus(ComplexNumber complex) {
+		return new ComplexNumber(this.a - complex.a, this.b - complex.b);
 	}
 
 	public ComplexNumber times(double d) {
@@ -115,6 +124,7 @@ public class ComplexNumber {
 		return new ComplexNumber(a, b);
 	}
 
+	@Deprecated
 	public void timesEquals(double d) {
 		this.a *= d;
 		this.b *= d;
@@ -129,6 +139,7 @@ public class ComplexNumber {
 		return new ComplexNumber(this.a / d, this.b / d);
 	}
 
+	@Deprecated
 	public void dividedByEquals(double d) {
 		this.a /= d;
 		this.b /= d;
@@ -138,6 +149,7 @@ public class ComplexNumber {
 		return this.times(complex.getConjagate()).dividedBy(complex.times(complex.getConjagate()).getA());
 	}
 
+	@Deprecated
 	public void dividedByEquals(ComplexNumber complex) {
 		ComplexNumber result = this.dividedBy(complex);
 		this.a = result.a;

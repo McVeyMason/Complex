@@ -1,0 +1,55 @@
+true
+Dimentions: 3.0x3.0
+Center: (-1.1535794534406862,0.2764864627191634)
+Zoom: -69
+true
+Dimentions: 3.0x3.0
+Center: (-1.4011730706841727,2.4750147154625663E-7)
+Zoom: -56
+true
+Dimentions: 3.0x3.0
+Center: (0.3839130024326667,0.26862042211883613)
+Zoom: -26
+true
+Dimentions: 3.0x3.0
+Center: (-0.15333772487387126,0.8934186598777564)
+Zoom: -16
+true
+Dimentions: 3.0x3.0
+Center: (-0.11502614869834132,0.969174361844055)
+Zoom: -36
+true
+Dimentions: 3.0x3.0
+Center: (-0.6014885377003086,0.6387381638648191)
+Zoom: -17s
+true
+Dimentions: 3.0x3.0
+Center: (-1.86215751777825,-4.139248516945358E-6)
+Zoom: -76
+true
+Dimentions: 3.0x3.0
+Center: (-1.8608280318902326,-5.266221043291869E-4)
+Zoom: -75
+true
+Dimentions: 3.0x3.0
+Center: (-1.860559169980493,9.50057603631651E-6)
+Zoom: -71
+true
+Dimentions: 3.0x3.0
+Center: (-1.8606775666851576,4.905257133976627E-4)
+Zoom: -61
+
+true
+Dimentions: 16.0x9.0
+Center: (-0.10960867968024038,0.8947966609048493)
+Zoom: -64
+
+true
+Dimentions: 16.0x9.0
+Center: (-1.471634828009968,0.051695057842295486)
+Zoom: -7
+
+true
+Dimentions: 16.0x9.0
+Center: (-0.654003388185785,0.06536938528088952)
+Zoom: -19

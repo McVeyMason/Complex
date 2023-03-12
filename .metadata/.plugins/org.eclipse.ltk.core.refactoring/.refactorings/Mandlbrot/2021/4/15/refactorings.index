@@ -11,3 +11,8 @@
 1617738554436	Rename field 'pixelsRemaining'
 1617739680809	Delete element
 1617743707252	Rename type 'colorStyle'
+1617831107642	Rename field 'julian'
+1617831115762	Rename method 'setJulian'
+1617831124049	Rename method 'getJulian'
+1617831431526	Rename field 'frame'
+1617831899266	Rename type 'ProgressBar'
