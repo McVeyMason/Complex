@@ -29,7 +29,7 @@ public class ProgressInfo extends Canvas {
 		jFrame.setLocation(0, 0);
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		jFrame.setResizable(true);
-		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//jFrame.setDefaultCloseOperation(JFrame.);
 		jFrame.setVisible(true);
 		jFrame.pack();
 		this.setBackground(Color.white);

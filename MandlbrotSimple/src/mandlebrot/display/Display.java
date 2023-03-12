@@ -22,8 +22,8 @@ public class Display extends Canvas {
 	private static final long serialVersionUID = 3427381498790975542L;
 
 	public static boolean SAVE_IMG = false;
-	public static final int WIDTH = 300;// 28000
-	public static final int HEIGHT = 200;// 15750
+	public static final int WIDTH = 280 * 4;// 28000
+	public static final int HEIGHT = 157 * 4;// 15750
 	private static final String TITLE = "Mandlebrot";
 
 	private JFrame jFrame;
@@ -62,7 +62,7 @@ public class Display extends Canvas {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(img, 0, 0, WIDTH, HEIGHT, null);
+		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), null);
 		g.dispose();
 		bs.show();
 	}
@@ -77,7 +77,10 @@ public class Display extends Canvas {
 		Graphics g = img.createGraphics();
 		g.drawImage(img, 0, 0, WIDTH, HEIGHT, null);
 		String name = "(" + String.format("%.8f", x) + "," + String.format("%.8f", y) + ")";
-		name += String.format("%.1f", zoomAmount) + "x_" + WIDTH + "x" + HEIGHT;
+		name += String.format("%.2f", zoomAmount) + "x_";
+		if (grapher.isJulia)
+			name+= "Julia(" + String.format("%.6f",grapher.juliaX) + "," + String.format("%.6f",grapher.juliaY) + ")";
+		name += WIDTH + "x" + HEIGHT;
 		File file = new File("generated\\" + name + ".png");
 		try {
 			ImageIO.write(img, "png", file);

@@ -15,10 +15,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		display = new Display();
-		grapher = new Grapher(3, 2);
+		grapher = new Grapher(3, 1.94, false);// 1.6875
 		listener = display.getListener();
 
-		grapher.setCenter(-2.0,0);
+		grapher.setCenter(-1.04883146, -.25168183);
+		grapher.setZoom(-94);
 		if (Display.SAVE_IMG) {
 			// testRenders();
 			renderImage();
@@ -31,6 +32,7 @@ public class Main {
 		System.out.println("Image Start");
 		grapher.setPixelsThread(display.getPixels());
 		display.renderImage(grapher.getCenterX(), grapher.getCenterY(), 1.0 / grapher.getZoomAmount(), grapher);
+		System.out.println(grapher.getZoom());
 	}
 
 	public static void start() {
@@ -94,47 +96,73 @@ public class Main {
 	 * Page up/down = change the color shift<br>
 	 */
 	private static void processKeys() {
-		if (listener.keys[KeyEvent.VK_P]) {
-			new Thread(() -> renderImage()).start();
-			listener.keys[KeyEvent.VK_P] = false;
-		}
-		// changes julia c with arrow keys
-		if (listener.keys[KeyEvent.VK_SHIFT]) {
-			if (listener.keys[KeyEvent.VK_CONTROL]) {
+		synchronized (grapher) {
+			if (listener.keys[KeyEvent.VK_P]) {
+				new Thread(() -> renderImage()).start();
+				listener.keys[KeyEvent.VK_P] = false;
+			}
+			// changes julia c with arrow keys
+			if (listener.keys[KeyEvent.VK_SHIFT]) {
+				if (listener.keys[KeyEvent.VK_CONTROL]) {
+					// Changing c value in the julia set
+					if (listener.keys[KeyEvent.VK_UP]) {
+						grapher.changeJuliaIm(0.00001);
+					}
+					if (listener.keys[KeyEvent.VK_DOWN]) {
+						grapher.changeJuliaIm(-0.00001);
+					}
+					if (listener.keys[KeyEvent.VK_RIGHT]) {
+						grapher.changeJuliaRe(0.00001);
+					}
+					if (listener.keys[KeyEvent.VK_LEFT]) {
+						grapher.changeJuliaRe(-0.00001);
+					}
+				} else {
+					// Changing c value in the julia set
+					if (listener.keys[KeyEvent.VK_UP]) {
+						grapher.changeJuliaIm(0.001);
+					}
+					if (listener.keys[KeyEvent.VK_DOWN]) {
+						grapher.changeJuliaIm(-0.001);
+					}
+					if (listener.keys[KeyEvent.VK_RIGHT]) {
+						grapher.changeJuliaRe(0.001);
+					}
+					if (listener.keys[KeyEvent.VK_LEFT]) {
+						grapher.changeJuliaRe(-0.001);
+					}
+				}
+			} else if (listener.keys[KeyEvent.VK_CONTROL]) {
 				// Changing c value in the julia set
 				if (listener.keys[KeyEvent.VK_UP]) {
-					grapher.changeA(0.00001);
+					grapher.changeJuliaIm(0.0001);
 				}
 				if (listener.keys[KeyEvent.VK_DOWN]) {
-					grapher.changeA(-0.00001);
+					grapher.changeJuliaIm(-0.0001);
+				}
+				if (listener.keys[KeyEvent.VK_RIGHT]) {
+					grapher.changeJuliaRe(-0.0001);
+				}
+				if (listener.keys[KeyEvent.VK_LEFT]) {
+					grapher.changeJuliaRe(-0.0001);
 				}
 			} else {
 				// Changing c value in the julia set
 				if (listener.keys[KeyEvent.VK_UP]) {
-					grapher.changeA(0.001);
+					grapher.changeJuliaIm(0.01);
 				}
 				if (listener.keys[KeyEvent.VK_DOWN]) {
-					grapher.changeA(-0.001);
+					grapher.changeJuliaIm(-0.01);
 				}
 			}
-		} else if (listener.keys[KeyEvent.VK_CONTROL]) {
-			// Changing c value in the julia set
-			if (listener.keys[KeyEvent.VK_UP]) {
-				grapher.changeA(0.0001);
+			if (listener.keys[KeyEvent.VK_F1]) {
+				grapher.isJulia = false;
 			}
-			if (listener.keys[KeyEvent.VK_DOWN]) {
-				grapher.changeA(-0.0001);
-			}
-		} else {
-			// Changing c value in the julia set
-			if (listener.keys[KeyEvent.VK_UP]) {
-				grapher.changeA(0.01);
-			}
-			if (listener.keys[KeyEvent.VK_DOWN]) {
-				grapher.changeA(-0.01);
+			if (listener.keys[KeyEvent.VK_F2]) {
+				grapher.isJulia = true;
+				grapher.setJuliaToMandlbrot();
 			}
 		}
-
 	}
 
 	private static void mapArray(int[][] ints, int[] to) {

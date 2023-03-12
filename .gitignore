@@ -1,2 +1,6 @@
-*.png
-*.jpg
+.png
+.jpg
+.metadata/
+.classpath
+.project
+*/.settings/

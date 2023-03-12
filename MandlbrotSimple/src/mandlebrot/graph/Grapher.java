@@ -4,15 +4,16 @@ import static mandlebrot.display.Display.HEIGHT;
 import static mandlebrot.display.Display.WIDTH;
 
 import java.awt.Color;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import mandlebrot.display.Display;
 
 public class Grapher {
 
 	private static final int DEPTH = 1_000;
-	private static final double ZOOM_SENSITIVITY = 5.0;
+	private static final double ZOOM_SENSITIVITY = 10.0;
+
+	public boolean isJulia;
+	public double juliaX = -0.12265338548232006;
+	public double juliaY = 0.649540685945864;
 
 	private static final int[] PALLET1 = { 0xa09ebb, 0xa8aec1, 0xb5d2cb, 0xbfffbc, 0xA6ffa1 };
 	private static final int[] PALLET2 = { 0x0061FF, 0x60EFFF };
@@ -22,23 +23,31 @@ public class Grapher {
 	private static final int[] PALLET4_MIRROR = { 0x03071E, 0x370617, 0x6A040F, 0x9D0208, 0xD00000, 0xDC2F02, 0xE85D04,
 			0xF48C06, 0xFAA307, 0xFFBA08, 0xFAA307, 0xF48C06, 0xE85D04, 0xDC2F02, 0xD00000, 0x9D0208, 0x6A040F,
 			0x370617 };
+	private static final int[] PALLET5 = { 0x540D6E, 0xF75C03, 0x246A73, 0xFFFFFF, 0x5CC8FF };
+	private static final int[] PALLET6 = { 0x004FFF, 0xF8F4E3, 0xD9481C, 0x31AFD4, 0x2A2B2A };
+	private static final int[] PALLET_CU = { 0x002A88, 0x004AA8, 0x69B3E7, 0x75AADB };// , 0xEAF8FF
+//	private statc final int[]
+
 	/**
 	 * Left bound is -width / 2 Right bound is width / 2;
 	 */
 	private double width;
 	/**
-	 * Bottom bound is -width / 2 Top bound is width / 2;
+	 * Bottom bound is -height / 2 Top bound is height / 2;
 	 */
 	private double height;
 	private double centerX;
 	private double centerY;
 	private int zoom;
 
+	@Deprecated
 	private double x0;
+	@Deprecated
 	private double y0;
+
 	private double a = 2.9825000000000434;
 
-	private int numThreads = 30;
+	private int numThreads = 64;
 	private boolean[] threadsDone;
 
 	private int pixelsCompleated;
@@ -48,16 +57,17 @@ public class Grapher {
 	private Color[] colors;
 	private int[] colorsRGB;
 
-	public Grapher(double width, double height) {
+	public Grapher(double width, double height, boolean julia) {
 		this.width = width;
 		this.height = height;
 		this.centerX = 0;
 		this.centerY = 0;
 		this.zoom = 0;
+		this.isJulia = julia;
 		generateC();
 		// colors = generateColors(2048);
 		// colors = generateColorsGrey(2048);
-		colors = generateColorsPallet(2048, PALLET4_MIRROR);
+		colors = generateColorsPallet(2048, PALLET6);
 		colorsRGB = new int[colors.length];
 		for (int i = 0; i < colors.length; i++) {
 			colorsRGB[i] = colors[i].getRGB();
@@ -153,11 +163,26 @@ public class Grapher {
 		return pixelsCompleated;
 	}
 
+	public void changeJuliaRe(double dRe) {
+		juliaX += dRe;
+	}
+
+	public void changeJuliaIm(double dIm) {
+		juliaY += dIm;
+	}
+
+	public void setJuliaToMandlbrot() {
+		juliaX = centerX;
+		juliaY = centerY;
+	}
+	
+	@Deprecated
 	public void changeA(double da) {
 		a += da;
 		generateC();
 	}
 
+	@Deprecated
 	private void generateC() {
 		x0 = 0.7885 * Math.cos(a);
 		y0 = 0.7885 * Math.sin(a);
@@ -231,7 +256,10 @@ public class Grapher {
 	private void setPixels(int[] pixels, int num) {
 		for (int y = num; y < HEIGHT; y += numThreads) {
 			for (int x = 0; x < WIDTH; x++) {
-				pixels[y * WIDTH + x] = isInMandlebrotNum(getGraphX(x), getGraphY(y));
+				if (isJulia) {
+					pixels[y * WIDTH + x] = isInJuliaNum(getGraphX(x), getGraphY(y), juliaX, juliaY);
+				} else
+					pixels[y * WIDTH + x] = isInMandlebrotNum(getGraphX(x), getGraphY(y));
 				pixelsCompleated++;
 //				if (num == 0 && x == 0) {
 //					System.out.println(y);
@@ -255,11 +283,36 @@ public class Grapher {
 
 		double x = 0.0, y = 0.0;
 		double iteration = 0;
-		int maxIteration = 5000;
+		int maxIteration = DEPTH;
 
-		while (x * x + y * y <= 0x10000000 && iteration < maxIteration) {
+		while (x * x + y * y <= 0x1000000 && iteration < maxIteration) {
 			double xTemp = x * x - y * y + x0;
 			y = 2 * x * y + y0;
+			x = xTemp;
+			iteration++;
+		}
+		if (iteration < maxIteration) {
+			double logz = Math.log(x * x + y * y) / 2.0;
+			double nu = Math.log(logz / Math.log(2)) / Math.log(2);
+			iteration = iteration + 1 - nu;
+		} else {
+			return 0;
+		}
+		int colorI = (int) (Math.sqrt(iteration) * 256) % 2048;
+		return colorsRGB[colorI];
+		// return Color.HSBtoRGB((float) (Math.sqrt(iteration / maxIteration) * 4f), 1f,
+		// 1f);
+	}
+
+	private int isInJuliaNum(double x0, double y0, double cx, double cy) {
+
+		double x = x0, y = y0;
+		double iteration = 0;
+		int maxIteration = DEPTH;
+
+		while (x * x + y * y <= 0x1000000 && iteration < maxIteration) {
+			double xTemp = x * x - y * y + cx;
+			y = 2 * x * y + cy;
 			x = xTemp;
 			iteration++;
 		}
